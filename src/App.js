@@ -1,18 +1,29 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
+  state = {
+    resp: null
+  }
+
+  componentDidMount() {
+    fetch('https://api.nasa.gov/planetary/apod?api_key=lspPyVWfkcWg6PxVO5f0Lnrq1MdMKPFDbIgDjlCM')
+    .then( resp => resp.json()) 
+    .then( resp => {
+      this.setState({
+        resp: resp,
+      })
+    })
+  };
+
   render() {
+    if (this.state.resp === null) {
+      return <p>Loading</p>
+    }
+
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      <div>
+        <img src={this.state.resp.hdurl} alt={this.state.resp.title}/>
       </div>
     );
   }
